@@ -1,0 +1,254 @@
+.main{
+    min-height: 100vh;
+}
+
+.sec__left {
+    padding: 40px 0px;
+    background-color: #191c24;
+    color: #6c7293;
+}
+
+.sec-left__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sec-left__user {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 50px;
+    margin-left: 20px;
+}
+
+.user__avt {
+    display: block;
+    padding: 10px 14px;
+    background-color: #fff;
+    border-radius: 50%;
+}
+
+.user__name {
+    margin: 0;
+    width: 200px;
+    font-size: 18px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.user__name p {
+    margin: 0;
+    font-size: 16px;
+}
+
+.user__setting {
+    position: relative;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.setting__option {
+    padding: 0;
+    padding-bottom: 20px;
+    margin: 0;
+    list-style: none;
+    min-width: 180px;
+    min-height: 0px;
+    background: #191c24;
+    border: 2px solid #2c2e33;
+    position: absolute;
+    border-radius: 4px;
+}
+
+.setting__link {
+    display: block;
+    font-size: 15px;
+    text-decoration: none;
+    color: #fff;
+    border-bottom: 1px solid #ccc;
+}
+
+.setting__link i {
+    margin: 10px;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    color: #0E8388;
+}
+
+.setting__link:hover {
+    color: #fff;
+    background: #0f1015;
+}
+
+.sec-left__menu {
+    font-size: 28px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.active {
+    background: #0f1015;
+    border-left: 4px solid #62CDFF;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+}
+#icon1{
+    color: #617143;
+}
+#icon2{
+    color: #DF7857;
+}
+#icon3{
+    color: #E7AB9A;
+}
+#icon4{
+    color: #2F58CD;
+}
+#icon5{
+    color: #DF2E38;
+}
+.sec-left__item:hover {
+    background: #0f1015;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+    transition: all 0.1s linear;
+}
+
+.sec-left__link {
+    display: block;
+    text-decoration: none;
+    color: #fff;
+    padding: 20px 20px;
+    font-size: 18px;
+    transition: transform 0.1s linear;
+}
+
+.sec-left__link i {
+    margin-right: 10px;
+    color: #AA5656;
+}
+
+.sec-left__link:hover {
+    color: #fff;
+    transform: translateX(8px);
+}
+
+/* right */
+.sec-right {
+    background: #212529;
+}
+
+.sec__right-product {
+    margin: 0px 30px;
+}
+
+.heading {
+    /* background-image: linear-gradient(to left, #d41459, #911a6c); */
+    background: #474d84;
+    height: 60px;
+    margin: 12px 0;
+    padding: 0;
+    color: #fff;
+    line-height: 60px;
+    text-align: center;
+    border-radius: 3px;
+}
+
+.sec-right__info-product {
+    height: 120px;
+    text-decoration: none;
+    background: #191c24;
+    border-radius: 5px;
+    color: #fff;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sec-right__info-product:hover {
+    color: #fff;
+    cursor: pointer;
+}
+
+.product-info__icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 120px;
+    height: 82px;
+    border-radius: 5px;
+}
+
+.icon {
+    color: #fff;
+    font-size: 50px;
+    color: #0E8388;
+}
+
+.product-info__group {
+    width: 100%;
+    align-content: center;
+}
+
+.product-info__name {
+    text-align: center;
+    font-size: 30px;
+    margin: 0;
+    font-weight: 500;
+}
+
+.product-info__quanlity {
+    font-size: 25px;
+    color: #6c7293;
+    margin: 0;
+    text-align: center;
+    letter-spacing: 3px;
+}
+
+/* show product */
+.table {
+    border: 1px solid #fff;
+}
+
+.table__title {
+    background: #191c24;
+    color: #6c7293;
+    font-size: 20px;
+    text-align: center;
+}
+
+.table__body {
+    background: #2C3333;
+    color: #fff;
+    text-align: center;
+}
+
+.product__edit {
+    font-size: 18px;
+    display: block;
+    color: #FFB84C;
+    transition: transform 0.1s linear;
+}
+
+.product__remove {
+    font-size: 18px;
+    display: block;
+    color: #FF0303;
+    transition: transform 0.1s linear;
+}
+
+.product__edit:hover {
+    color: #FFB84C;
+    transform: scale(1.2);
+}
+
+.product__remove:hover {
+    color: #FF0303;
+    transform: scale(1.2);
+}
