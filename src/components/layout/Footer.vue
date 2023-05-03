@@ -1,7 +1,7 @@
 <template>
    <div class="footer row">
         <div class="col-lg-3">
-            <img src="https://theme.hstatic.net/1000391844/1000931071/14/logo.png?v=139" alt="lo go" class="w-100">
+            <img src="https://gudlogo.com/wp-content/uploads/2019/04/logo-chu-T-logot.jpg" alt="lo go" class="logo__image-footer">
         </div>
         <div class="col-lg-4">
             <div class="footer__title">
@@ -48,9 +48,6 @@
                 <input type="text" class="footer__input" placeholder="Nhập email tại đây...">
                 <button class="footer__btn">Đăng ký</button>
             </div>
-            <div class="admin mt-4">
-                <router-link to="/admin/product" class="btn btn-lg btn-success" v-if="checkSeccsion()">Admin</router-link>
-            </div>
         </div>
     </div>
 </template>
@@ -58,23 +55,14 @@
 <script>
 export default {
     name: "footer-com",
-    data(){
-        return{
-            
-        }
-    },
-    methods:{
-        checkSeccsion(){
-      if(JSON.parse(sessionStorage.getItem('user'))){
-        return JSON.parse(sessionStorage.getItem('user')).isAdmin
-      }else{
-        return false
-      }
-    },
-    },
+   
    
 }
 </script>
 <style scoped>
-
+.logo__image-footer{
+    width: 160px;
+    height: 80px;
+    margin:30px 0px 0px 70px;
+}
 </style>

@@ -13,7 +13,7 @@
         <td>{{ product.name }}</td>
         <td>{{ product.quanlityOrder }}</td>
         <td class="price">{{ formatCurrency(product.price) }}</td>
-        <td class="price total__price">{{ formatCurrency(product.total) }}</td>
+        <td class="price text-black">{{ formatCurrency(product.total) }}</td>
       </tr>
     </tbody>
   </table>

@@ -8,7 +8,7 @@
       <div class="col-md-8" v-if="token">
         <div class="card mb-5">
           <div class="text-left logo p-2 px-5">
-            <img src="/img/logo.png" width="100" />
+            <img src="https://gudlogo.com/wp-content/uploads/2019/04/logo-chu-T-logot.jpg" width="100" />
           </div>
           <div class="invoice p-5">
             <h5 class="text-center">Hóa đơn</h5>
@@ -25,19 +25,19 @@
                     <td>
                       <div class="py-2">
                         <span class="d-block text-muted">Order Date</span>
-                        <span>{{ formatDate(order.InfoOrder.createdAt) }}</span>
+                        <span class="text-black">{{ formatDate(order.InfoOrder.createdAt) }}</span>
                       </div>
                     </td>
                     <td>
                       <div class="py-2">
                         <span class="d-block text-muted">Order No</span>
-                        <span>{{ order.InfoOrder._id }}</span>
+                        <span class="text-black">{{ order.InfoOrder._id }}</span>
                       </div>
                     </td>
                     <td>
                       <div class="py-2">
                         <span class="d-block text-muted">Address</span>
-                        <span v-if="order.InfoOrder.address !=''">{{order.InfoOrder.address }}</span>
+                        <span class="text-black" v-if="order.InfoOrder.address !=''">{{order.InfoOrder.address }}</span>
                         <span v-else>Nhận xe tại cửa hàng</span>
                       </div>
                     </td>
@@ -62,7 +62,7 @@
       </div>
     </div>
     <div v-if="token== false" class="text-center fs-3">
-      <span>Đăng nhập để xem <router-link to="/login">Đăng nhập tại đây</router-link></span>
+      <span class="text-black">Đăng nhập để xem <router-link to="/login">Đăng nhập tại đây</router-link></span>
     </div>
     
   </div>
@@ -74,7 +74,6 @@ import productOrder from '../components/order/ProductOrder.vue'
 export default {
     components:{
         productOrder
-
     },
   data() {
     return {
@@ -90,15 +89,14 @@ export default {
       );
     },
     async getOrder() {
-      console.log(sessionStorage.getItem("user"))
       if (sessionStorage.getItem("user")!=null) {
         this.token = true;
         const idUser = JSON.parse(sessionStorage.getItem("user"));
         const resulf = await orderService.historyOrder(idUser._id);
         this.orders = [...resulf.data];
+        console.log(this.orders)
       }else{
         this.token=false
-        console.log(this.token)
       }
     },
     sumPrice(products){

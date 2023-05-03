@@ -8,8 +8,8 @@
       <div class="product__info">
         <span class="info__name">{{ productItem.name }}</span>
         <div class="info__color text-center fs-3">
-          <span v-if="productItem.color" class="color__deatail me-3">Màu sắc: {{ productItem.color }}</span>
-          <span v-if="!productItem.color" class="color__deatail me-3">Sản phẩm không có màu</span>
+          <span v-if="productItem.color" class="color__deatail text-black  me-3">Màu sắc: {{ productItem.color }}</span>
+          <span v-if="!productItem.color" class="color__deatail text-black me-3">Sản phẩm không có màu</span>
         </div>
         <span class="info__price"> {{ formatCurrency(productItem.price) }}</span>
         <button class="info__btn" @click.prevent.stop="addProductToCart(productItem)">Thêm vào giỏ hàng</button>

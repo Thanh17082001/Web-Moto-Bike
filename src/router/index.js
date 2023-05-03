@@ -17,6 +17,8 @@ import adminProduct from "../components/admin/ProductAll.vue";
 import trashProduct from "../components/admin/AdminTrashProduct";
 import updateProduct from "../components/admin/ProductFormEdit.vue";
 import newsAdmin from "../components/admin/AdminNews.vue";
+import orderAdmin from "../components/admin/AdminOrder.vue";
+import statisticalView from "../view/StatisticalView.vue";
 
 const routes = [
   {
@@ -78,8 +80,16 @@ const routes = [
     meta: { title: "Chi tiết sản phẩm" },
    props:true
   },
-  { path: "/introduce", component: Introduce, meta: { title: "Gioi thieu" } },
-  { path: "/news", component: newsPage, meta: { title: "Tin tuc" } },
+  { path: "/introduce",  components: {
+    default: Introduce,
+    "page-header": headerCom,
+    "page-footer": footerCom,
+  }, meta: { title: "Gioi thieu" } },
+  { path: "/news", components: {
+    default: newsPage,
+    "page-header": headerCom,
+    "page-footer": footerCom,
+  }, meta: { title: "Tin tuc" } },
   {
     path: "/register",
     components: {
@@ -117,7 +127,9 @@ const routes = [
       { path: "product", component: adminProduct, meta: { title: "Admin" } },
       { path: "add", component: addForm, meta: { title: "thêm sản phẩm" } },
       { path: "trash", component: trashProduct, meta: { title: "Thùng rác" } },
-      { path: "news", component: newsAdmin, meta: { title: "Tin tức" } },
+      { path: "news", component: newsAdmin, meta: { title: "Quản lý tin tức" } },
+      { path: "order", component: orderAdmin, meta: { title: "Quản lý đơn hàng" } },
+      { path: "statistical", component: statisticalView, meta: { title: "Thống kê" } },
       {
         path: "/update/:id",
         name: "product.edit",

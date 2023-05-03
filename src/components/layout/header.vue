@@ -2,9 +2,9 @@
   <header class="header d-flex justify-content-between align-items-center">
     <div class="nav__logo">
       <img
-        src="https://theme.hstatic.net/1000391844/1000931071/14/logo.png?v=139"
+        src="https://gudlogo.com/wp-content/uploads/2019/04/logo-chu-T-logot.jpg"
         alt="lo go"
-        class="log__image"
+        class="logo__image"
       />
     </div>
     <nav class="nav justify-content-between">
@@ -72,15 +72,18 @@
         <i class="fa-solid fa-user account__option" ></i>
         <ul class="setting__option setting__option-overlay" >
           <li class="setting__item">
-              <span class="fs-5" v-if="checkSeccsion()">{{ checkSeccsion() }}</span>
+              <span class="fs-5" v-if="token">{{ checkSeccsion() }}</span>
               <router-link to="/login"  v-if="!checkSeccsion()" class="setting__link">
                 <i class="fa-solid fa-pen-to-square"></i> Đăng nhập</router-link
               >
-              <router-link to="/register" v-if="!checkSeccsion()" class="setting__link">
-                <i class="fa-regular fa-registered"></i> Đăng kí</router-link
+              <router-link to="/register" v-if="!token" class="setting__link">
+                <i class="fa-regular fa-registered me-2"></i>Đăng kí    </router-link
               >
-              <a @click.prevent.stop="logout" class="setting__link">
-                <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a
+              <router-link to="/admin/product" v-if="isAdmin" class="setting__link">
+                <i class="fa-regular fa-registered"></i>Quản trị</router-link
+              >
+              <span @click.prevent.stop="logout" class="setting__link">
+                <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</span
               >
               
             </li>
@@ -95,6 +98,7 @@
 </template>
 
 <script>
+import { getCurrentInstance } from 'vue'
 export default {
   name: "header-com",
   watch:{
@@ -106,7 +110,8 @@ export default {
     return {
       cartCount:0,
       inputSearch:'',
-      token:false
+      token:false,
+      isAdmin:false
     };
   },
  
@@ -121,19 +126,26 @@ export default {
       }
     },
     checkSeccsion(){
-      if(JSON.parse(sessionStorage.getItem('user'))){
+      const getUser=JSON.parse(sessionStorage.getItem('user'))
+      if(getUser){
         this.token=true
-        return JSON.parse(sessionStorage.getItem('user')).name
+        if(getUser.isAdmin){
+          this.isAdmin=true
+        }
+        return getUser.name
       }else{
         this.token=false
+        this.isAdmin=false
         return false
       }
     },
     logout(){
+      const instance = getCurrentInstance();
       if(JSON.parse(sessionStorage.getItem('user'))){
         sessionStorage.removeItem('user');
         alert('Đăng xuất thành công')
         this.checkSeccsion()
+        instance.proxy.$forceUpdate(); 
       }else{
         alert('bạn chưa đăng nhập tài khoản')
       }
@@ -155,9 +167,11 @@ export default {
    right: 0;
    z-index: 10;
    display: none;
+   min-width: 180px;
 }
 .nav__account:hover .setting__option-overlay{
   display: block;
+  
 }
 .nav__account{
   position: relative;
@@ -173,5 +187,10 @@ export default {
 }
 .nav__account::before:hover .setting__option-overlay{
   display: block;
+}
+.logo__image{
+  width: 150px;
+  height: 80px;
+  margin-left: 20px;
 }
 </style>
