@@ -30,7 +30,7 @@
       </div>
     </div>
     <!-- cung loai -->
-    <h3 class="content__title text-center mt-3"><span>Sản phẩm cùng loại </span></h3>
+    <h3 class="content__title text-center mt-3 "><span class="text-black">Sản phẩm cùng loại </span></h3>
     <div class="row sildeshow-product">
       <product-item v-for="(product, index) in productsSimilar"
         :key="index" :productItem="product"></product-item>

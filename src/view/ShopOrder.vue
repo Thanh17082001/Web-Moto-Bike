@@ -12,9 +12,9 @@
           </div>
           <div class="invoice p-5">
             <h5 class="text-center">Hóa đơn</h5>
-            <span class="font-weight-bold d-block mt-4"
+            <span class="font-weight-bold d-block mt-4 text-info"
               >Khách hàng:
-              <span class="">{{ order.InfoOrder.nameCustomer }}</span></span
+              <span class="text-black">{{ order.InfoOrder.nameCustomer }}</span></span
             >
             <div
               class="payment border-top mt-3 mb-3 border-bottom table-responsive"
@@ -38,7 +38,7 @@
                       <div class="py-2">
                         <span class="d-block text-muted">Address</span>
                         <span class="text-black" v-if="order.InfoOrder.address !=''">{{order.InfoOrder.address }}</span>
-                        <span v-else>Nhận xe tại cửa hàng</span>
+                        <span v-else class="text-black">Nhận xe tại cửa hàng</span>
                       </div>
                     </td>
                   </tr>
