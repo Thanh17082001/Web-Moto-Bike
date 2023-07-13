@@ -1,5 +1,6 @@
 import axios from "axios";
 const commonConfig = {
+    withCredentials: true,
     headers: {
         "Content-Type": "application/json",
         Accept: "application/json",

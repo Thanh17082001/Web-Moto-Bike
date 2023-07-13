@@ -113,7 +113,8 @@
 </template>
 
 <script>
-import { getCurrentInstance } from "vue";
+
+import userService from '@/services/user.service';
 export default {
   name: "header-com",
   watch: {
@@ -157,13 +158,12 @@ export default {
         return false;
       }
     },
-    logout() {
-      const instance = getCurrentInstance();
+    async logout() {
       if (JSON.parse(sessionStorage.getItem("user"))) {
         sessionStorage.removeItem("user");
+         await userService.logOut()
         alert("Đăng xuất thành công");
-        this.checkSeccsion();
-        instance.proxy.$forceUpdate();
+        this.token = false; 
       } else {
         alert("bạn chưa đăng nhập tài khoản");
       }
@@ -174,8 +174,22 @@ export default {
         this.cartCount = getItem.length;
       }
     },
+    async getLoginGoogle(){
+      try {
+        const user = await userService.getUser();
+        this.token = true;
+        if(user){
+          sessionStorage.setItem("user", JSON.stringify(user))
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  },
+  mounted(){
   },
   created() {
+    this.getLoginGoogle()
     this.cartItems();
   },
 };

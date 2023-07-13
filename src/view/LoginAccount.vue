@@ -34,6 +34,10 @@
           </button>
         </p>
       </form>
+      <div class="social d-flex justify-content-center">
+        <div class="btn btn-danger me-4"><a href="http://localhost:3000/user/google"><i class="fa-brands fa-google"></i></a></div>
+        <div class="btn btn-info"><i class="fa-brands fa-facebook"></i></div>
+      </div>
       <p class="acount__message"></p>
     </div>
   </div>
@@ -51,16 +55,17 @@ export default {
   methods:{
     async login(){
       const result = await userService.login(this.infoUser);
-      console.log(result)
+      
      if(result.data != null){
       sessionStorage.setItem("user", JSON.stringify(result.data))
       this.$router.push({path:'/'})
      }else{
-      console.log(result)
+      
       this.message='Bạn nhập sai email hoặc mật khẩu'
       this.infoUser={}
      }
-    }
+    },
+  
   },
   mounted(){
     if(sessionStorage.getItem('user')){
@@ -72,4 +77,5 @@ export default {
 
 <style>
 @import '../assets/css/account.css'
+
 </style>

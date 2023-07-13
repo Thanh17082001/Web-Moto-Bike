@@ -11,5 +11,11 @@ class userService {
     async login(data){
         return await this.api.post('/login', data)
     }
+    async getUser(){
+        return (await this.api.get('/user-info')).data
+    }
+    async logOut(){
+        return (await this.api.get('/logout')).data
+    }
 }
 export default new userService();
