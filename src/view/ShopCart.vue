@@ -10,6 +10,7 @@
 import cartProduct from "../components/cart/CartProduct.vue";
 import cartInfoUser from "../components/cart/CartInfoUser.vue";
 import orderService from '../services/order.service'
+import productServices from "../services/product.services";
 export default {
   components: {
     cartProduct,
@@ -17,23 +18,32 @@ export default {
   },
   data(){
     return{
-      listCart: {},
+      listCart: [],
       totalProduct:0
     }
   },
   methods:{
-    getItemFromSecsion() {
-      if (sessionStorage.getItem("cart")) {
-        this.listCart = JSON.parse(sessionStorage.getItem("cart"));
+    async getItemFromSecsion() {
+      if (this.$cookies.isKey("cart")) {
+        const products = this.$cookies.get("cart");
+        for(let i=0 ; i<products.length;i++){
+          const product = await productServices.getProductById(products[i].id)
+          this.listCart.push({
+            ...product,
+            quanlityOrder:products[i].quanlityOrder
+          })
+        }
       }else{
-        this.listCart={}
+        this.listCart=[]
       }
     },
     changeQuanlity(){
+      this.listCart=[]
       this.getItemFromSecsion()
       this.totalPrice()
     },
     deleteitemCart(){
+      this.listCart=[]
       this.getItemFromSecsion()
       this.totalPrice()
     },

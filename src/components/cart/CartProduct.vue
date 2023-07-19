@@ -78,37 +78,40 @@ export default {
       }).format(price);
     },
     async ChangeQuanlityCart(itemCart, e) {
-      const getItem = JSON.parse(sessionStorage.getItem("cart"));
+      const getItem = this.$cookies.get("cart");
       const index = this.isProductInCart(itemCart, getItem);
-      const product = await productServices.getProductById(getItem[index]._id)
+      const product = await productServices.getProductById(getItem[index].id)
       if (e.target.value == "+") {
         getItem[index].quanlityOrder++;
         if(product.quanlity < getItem[index].quanlityOrder){
           getItem[index].quanlityOrder--
           alert("sản phẩm không đủ số lượng")
         }
-        sessionStorage.setItem("cart", JSON.stringify(getItem));
-      } else {
+        this.$cookies.set('cart', JSON.stringify(getItem))
+      } 
+      else {
         getItem[index].quanlityOrder--;
         if(getItem[index].quanlityOrder <=0){
-        getItem[index].quanlityOrder++;
+          getItem[index].quanlityOrder++;
+          alert("Số lượng phải lớn hơn 0")
         }
-        sessionStorage.setItem("cart", JSON.stringify(getItem));
+        this.$cookies.set('cart', JSON.stringify(getItem))
       }
       this.$emit('changeQuanlity')
     },
     deleteCartItem(itemCart) {
-      const getItem = JSON.parse(sessionStorage.getItem("cart"));
+      const getItem =  this.$cookies.get("cart");
       const itemDeleted = getItem.filter(function (item) {
-        return item._id !== itemCart._id;
+        return item.id !== itemCart._id;
       });
-      sessionStorage.setItem("cart", JSON.stringify(itemDeleted));
+      console.log(itemDeleted);
+      this.$cookies.set('cart', itemDeleted)
       this.$emit('deleteitemCart')
     },
     isProductInCart(newItem, Arrayproduct) {
       var index = -1;
       for (var i = 0; i < Arrayproduct.length; i++) {
-        if (Arrayproduct[i]._id == newItem._id) {
+        if (Arrayproduct[i].id == newItem._id) {
           index = i;
         }
       }

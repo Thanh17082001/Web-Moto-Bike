@@ -36,7 +36,7 @@
       </form>
       <div class="social d-flex justify-content-center">
         <div class="btn btn-danger me-4"><a href="http://localhost:3000/user/google"><i class="fa-brands fa-google"></i></a></div>
-        <div class="btn btn-info"><i class="fa-brands fa-facebook"></i></div>
+        <div class="btn btn-info"><a href="http://localhost:3000/user/facebook"><i class="fa-brands fa-facebook"></i></a></div>
       </div>
       <p class="acount__message"></p>
     </div>

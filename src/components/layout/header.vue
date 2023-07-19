@@ -105,7 +105,7 @@
         </ul>
       </div>
       <router-link to="/cart" class="nav__cart">
-        <!-- <span class="cart__count">{{ cartCount }}</span> -->
+        <span class="cart__count">{{ cartCount }}</span>
         <i class="fa-solid fa-cart-shopping"></i>
       </router-link>
     </div>
@@ -121,10 +121,11 @@ export default {
     token() {
       this.checkSeccsion();
     },
-    cartCount() {
-      this.cartItems();
-    },
+    '$cookies.yourCookieName'(newValue) {
+      this.cartCount = newValue.length
+    }
   },
+   
   data() {
     return {
       cartCount: 0,
@@ -133,8 +134,22 @@ export default {
       isAdmin: false,
     };
   },
+  mounted() {
+    if(this.$cookies.get('cart')){
+
+      this.cartCount =this.$cookies.get('cart')? this.$cookies.get('cart').length : 0
+      setInterval(() => {
+        const newCookieValue = this.$cookies.get('cart').length
+        if (newCookieValue !== this.cartCount) {
+          this.cartCount = newCookieValue
+          
+        }
+      }, 500) // Lấy giá trị cookie ban đầu
+    }
+  },
+ 
   methods: {
-    searchPage() {
+    searchPage() {  
       if (this.inputSearch == "") {
         alert("Chưa nhập từ khóa tìm kiếm");
       } else {
@@ -168,12 +183,7 @@ export default {
         alert("bạn chưa đăng nhập tài khoản");
       }
     },
-    cartItems() {
-      const getItem = JSON.parse(sessionStorage.getItem("cart"));
-      if (getItem) {
-        this.cartCount = getItem.length;
-      }
-    },
+    
     async getLoginGoogle(){
       try {
         const user = await userService.getUser();
@@ -184,13 +194,12 @@ export default {
       } catch (error) {
         console.log(error);
       }
-    }
+    },
+     
   },
-  mounted(){
-  },
+  
   created() {
     this.getLoginGoogle()
-    this.cartItems();
   },
 };
 </script>
