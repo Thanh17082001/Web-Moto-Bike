@@ -24,6 +24,7 @@
 
 <script>
 import cartSevice from '../../services/cart.service'
+import productServices from "../../services/product.services";
 export default {
   name: "productItem-com",
   data() {
@@ -58,15 +59,14 @@ export default {
 
     async addProductToCart(productItem) {
       const user = JSON.parse(sessionStorage.getItem("user"));
+      
       if (!user) {
-        if (confirm("Bạn muốn thêm sản phẩm vào giỏ hàng")) {
+        if (confirm(`Bạn muốn thêm ${productItem.name} vào giỏ hàng`)) {
           let cartList = [];
           const cartProduct = { id: productItem._id, quanlityOrder: 1 };
-
           if (!this.$cookies.isKey("cart")) {
             cartList.push(cartProduct);
             this.$cookies.set("cart", JSON.stringify(cartList));
-            console.log(this.$cookies.get("cart"));
           } else {
             let getItemToCookie = this.$cookies.get("cart");
             const isCartItem = this.isProductInCart(
@@ -77,17 +77,31 @@ export default {
               getItemToCookie.push(cartProduct);
               this.$cookies.set("cart", JSON.stringify(getItemToCookie));
             } else {
+              const product = await productServices.getProductById(productItem._id)
               getItemToCookie[isCartItem].quanlityOrder++;
+              if(getItemToCookie[isCartItem].quanlityOrder > product.quanlity){
+                getItemToCookie[isCartItem].quanlityOrder=product.quanlity
+              }
               this.$cookies.set("cart", JSON.stringify(getItemToCookie));
             }
           }
         }
       } else {
-        const data ={
-          productId:productItem._id
+        if(confirm(`Bạn muốn thêm ${productItem.name} vào giỏ hàng`)){
+          const product = await productServices.getProductById(productItem._id)
+          const data ={
+            productId:productItem._id,
+            userId:user._id
+          }
+          const productsFromCarrt = await cartSevice.addProductToCart(data)
+          const products= productsFromCarrt.products
+          for(let i=0; i<products.length;i++){
+            if(products[i].quanlityOrder > product.quanlity && products[i].idProduct == product._id){
+               await cartSevice.updateQuanlity({idProduct: productItem._id, idUser: user._id, quanlityOrder:product.quanlity})
+               alert('Số sản phẩm đã hết')
+            }
+          }
         }
-       const product= await cartSevice.addProductToCart(data)
-       console.log(product)
       }
     },
     formatCurrency(price) {

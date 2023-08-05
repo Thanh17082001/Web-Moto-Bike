@@ -64,12 +64,13 @@
 </template>
 
 <script>
+import cartService from '@/services/cart.service';
 import productServices  from '../../services/product.services';
 export default {
   props:{
     listCart:{}
   },
-  emits:['changeQuanlity','deleteitemCart'],
+  emits:['changeQuanlity','deleteItemCart'],
   methods: {
     formatCurrency(price) {
       return new Intl.NumberFormat("vi-VN", {
@@ -78,35 +79,72 @@ export default {
       }).format(price);
     },
     async ChangeQuanlityCart(itemCart, e) {
-      const getItem = this.$cookies.get("cart");
-      const index = this.isProductInCart(itemCart, getItem);
-      const product = await productServices.getProductById(getItem[index].id)
-      if (e.target.value == "+") {
-        getItem[index].quanlityOrder++;
-        if(product.quanlity < getItem[index].quanlityOrder){
-          getItem[index].quanlityOrder--
-          alert("sản phẩm không đủ số lượng")
-        }
-        this.$cookies.set('cart', JSON.stringify(getItem))
-      } 
-      else {
-        getItem[index].quanlityOrder--;
-        if(getItem[index].quanlityOrder <=0){
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      if(!user){
+        const getItem = this.$cookies.get("cart");
+        console.log(getItem);
+        const index = this.isProductInCart(itemCart, getItem);
+        const product = await productServices.getProductById(getItem[index].id)
+        if (e.target.value == "+") {
           getItem[index].quanlityOrder++;
-          alert("Số lượng phải lớn hơn 0")
+          if(product.quanlity < getItem[index].quanlityOrder){
+            getItem[index].quanlityOrder--
+            alert("sản phẩm không đủ số lượng")
+          }
+          this.$cookies.set('cart', JSON.stringify(getItem))
+        } 
+        else {
+          getItem[index].quanlityOrder--;
+          if(getItem[index].quanlityOrder <=0){
+            getItem[index].quanlityOrder++;
+            alert("Số lượng phải lớn hơn 0")
+          }
+          this.$cookies.set('cart', JSON.stringify(getItem))
         }
-        this.$cookies.set('cart', JSON.stringify(getItem))
+        
+      }
+      else{
+        if(e.target.value == "+"){
+          await cartService.changeQuanlity("increase", {idProduct: itemCart._id, idUser: user._id})
+           const cartItem= await cartService.getProductToCart({idUser: user._id})
+           const products =cartItem.products
+           const product = await productServices.getProductById(itemCart._id)
+           for (let i=0; i<products.length;i++){
+            if(products[i].quanlityOrder > product.quanlity && products[i].idProduct._id== product._id){
+              alert("Số lượng sản phẩm không đủ")
+              await cartService.updateQuanlity( {idProduct: itemCart._id, idUser: user._id, quanlityOrder:product.quanlity}) // nên sử lý dòng này trên server
+            }
+           }
+        }
+        else{
+           const cart= await cartService.changeQuanlity("reduce",  {idProduct: itemCart._id, idUser: user._id})
+           const products= cart.products
+           for (let i=0; i<products.length;i++){
+            if(products[i].quanlityOrder <= 0) {
+              alert("Số lượng phải lớn hơn 0")
+              await cartService.updateQuanlity({idProduct: itemCart._id, idUser: user._id, quanlityOrder:1}) // nên sử lý dòng này trên server
+            }
+           }
+        }
       }
       this.$emit('changeQuanlity')
     },
-    deleteCartItem(itemCart) {
-      const getItem =  this.$cookies.get("cart");
-      const itemDeleted = getItem.filter(function (item) {
-        return item.id !== itemCart._id;
-      });
-      console.log(itemDeleted);
-      this.$cookies.set('cart', itemDeleted)
-      this.$emit('deleteitemCart')
+    async deleteCartItem(itemCart) {
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      if(!user){
+        const getItem =  this.$cookies.get("cart");
+        const itemDeleted = getItem.filter(function (item) {
+          return item.id !== itemCart._id;
+        });
+        this.$cookies.set('cart', itemDeleted)
+      }
+      else{
+        const data={
+          idProduct:itemCart._id,
+        }
+        await cartService.deleteQuanlity(data)
+      }
+      this.$emit('deleteItemCart')
     },
     isProductInCart(newItem, Arrayproduct) {
       var index = -1;

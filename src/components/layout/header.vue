@@ -115,14 +115,12 @@
 <script>
 
 import userService from '@/services/user.service';
+import cartService from '@/services/cart.service';
 export default {
   name: "header-com",
   watch: {
     token() {
       this.checkSeccsion();
-    },
-    '$cookies.yourCookieName'(newValue) {
-      this.cartCount = newValue.length
     }
   },
    
@@ -131,24 +129,15 @@ export default {
       cartCount: 0,
       inputSearch: "",
       token: false,
-      isAdmin: false,
+      isAdmin: false
     };
   },
-  mounted() {
-    if(this.$cookies.get('cart')){
-
-      this.cartCount =this.$cookies.get('cart')? this.$cookies.get('cart').length : 0
-      setInterval(() => {
-        const newCookieValue = this.$cookies.get('cart').length
-        if (newCookieValue !== this.cartCount) {
-          this.cartCount = newCookieValue
-          
-        }
-      }, 500) // Lấy giá trị cookie ban đầu
-    }
+  async mounted() {
+     this.quanlityCart()
   },
  
   methods: {
+    
     searchPage() {  
       if (this.inputSearch == "") {
         alert("Chưa nhập từ khóa tìm kiếm");
@@ -162,7 +151,9 @@ export default {
     checkSeccsion() {
       const getUser = JSON.parse(sessionStorage.getItem("user"));
       if (getUser) {
+        this.$cookies.remove('cart');
         this.token = true;
+        // this.quanlityCart()
         if (getUser.isAdmin) {
           this.isAdmin = true;
         }
@@ -176,9 +167,11 @@ export default {
     async logout() {
       if (JSON.parse(sessionStorage.getItem("user"))) {
         sessionStorage.removeItem("user");
-         await userService.logOut()
+         await userService.logOut()// có thể chỗ này
         alert("Đăng xuất thành công");
-        this.token = false; 
+        this.token = false;
+        this.cartCount=0
+        this.quanlityCart()
       } else {
         alert("bạn chưa đăng nhập tài khoản");
       }
@@ -188,6 +181,8 @@ export default {
       try {
         const user = await userService.getUser();
         this.token = true;
+        this.quanlityCart()
+        this.$cookies.remove('cart');
         if(user){
           sessionStorage.setItem("user", JSON.stringify(user))
         }
@@ -195,7 +190,21 @@ export default {
         console.log(error);
       }
     },
-     
+  
+
+    async quanlityCart(){
+      const user = JSON.parse(sessionStorage.getItem('user'))
+        const cart = user ? await cartService.getProductToCart({idUser: user._id}): {products:[]}
+        console.log(cart);
+        this.cartCount = this.$cookies.isKey("cart") ? this.$cookies.get('cart').length : cart.products.length
+        setInterval(async () => {
+          const cart = user ? await cartService.getProductToCart({idUser: user._id}): {products:[]}
+          const newCookieValue = this.$cookies.isKey("cart") ? this.$cookies.get('cart').length : cart.products.length
+          if (newCookieValue !== this.cartCount) {
+            this.cartCount= newCookieValue
+          }
+        }, 250) 
+    }
   },
   
   created() {

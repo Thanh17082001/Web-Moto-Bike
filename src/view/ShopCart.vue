@@ -1,7 +1,7 @@
 <template>
   <div class="container mb-4">
     <h3 class="cart__title text-center my-3 text-uppercase">Giỏ hàng</h3>
-    <cart-product :listCart="listCart" @changeQuanlity="changeQuanlity" @deleteitemCart="deleteitemCart"></cart-product>
+    <cart-product :listCart="listCart" @changeQuanlity="changeQuanlity" @deleteItemCart="deleteItemCart"></cart-product>
     <cart-info-user :totalProduct="totalProduct" @order-product="orderProduct"></cart-info-user>
   </div>
 </template>
@@ -10,6 +10,7 @@
 import cartProduct from "../components/cart/CartProduct.vue";
 import cartInfoUser from "../components/cart/CartInfoUser.vue";
 import orderService from '../services/order.service'
+import cartService from '../services/cart.service'
 import productServices from "../services/product.services";
 export default {
   components: {
@@ -24,28 +25,39 @@ export default {
   },
   methods:{
     async getItemFromSecsion() {
-      if (this.$cookies.isKey("cart")) {
-        const products = this.$cookies.get("cart");
-        for(let i=0 ; i<products.length;i++){
-          const product = await productServices.getProductById(products[i].id)
-          this.listCart.push({
-            ...product,
-            quanlityOrder:products[i].quanlityOrder
-          })
+      this.listCart=[]
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      if(!user){
+        if (this.$cookies.isKey("cart")) {
+          const products = this.$cookies.get("cart");
+          for(let i=0 ; i<products.length;i++){
+            const product = await productServices.getProductById(products[i].id)
+            this.listCart.push({
+              ...product,
+              quanlityOrder:products[i].quanlityOrder
+            })
+          }
+        }else{
+          this.listCart=[]
         }
-      }else{
-        this.listCart=[]
+      }
+      else{
+        const cartItem = await cartService.getProductToCart({idUser: user._id})
+        for(let i=0 ; i<cartItem.products.length;i++){
+            this.listCart.push({
+              ...cartItem.products[i].idProduct,
+              quanlityOrder:cartItem.products[i].quanlityOrder
+            })
+          }
       }
     },
     changeQuanlity(){
-      this.listCart=[]
+     
       this.getItemFromSecsion()
-      this.totalPrice()
+      
     },
-    deleteitemCart(){
-      this.listCart=[]
+    deleteItemCart(){
       this.getItemFromSecsion()
-      this.totalPrice()
     },
     totalPrice(){
       const getItem = JSON.parse(sessionStorage.getItem("cart"));
@@ -91,7 +103,7 @@ export default {
       }
     }
   },
-  created(){
+  mounted(){
     this.getItemFromSecsion()
     this.totalPrice()
   }
